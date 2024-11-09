@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { LogIn, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function WelcomePage() {
   const [typedText, setTypedText] = useState('');
-  const fullText = "Where your life gets romanticized and your goals materialized....";
+  const fullText = "Unlock stories that transform your everyday moments and turn your goals into reality...";
   const navigate = useNavigate();
 
+  // Typing effect for the welcome message
   useEffect(() => {
     let i = 0;
     const typingEffect = () => {
@@ -18,8 +20,34 @@ export default function WelcomePage() {
     };
     typingEffect();
 
-    return () => clearTimeout(typingEffect);
-  }, [fullText]);
+    return () => clearTimeout(typingEffect); // Clean up
+  }, []);
+
+  // Redirection logic if the user is already authenticated
+  useEffect(() => {
+    // const checkAuthentication = async () => {
+    //   try {
+    //     // Check if the user is authenticated with Django
+    //     const djangoResponse = await axios.get('https://127.0.0.1:8000/auth/status/django/', {
+    //       withCredentials: true,
+    //     });
+
+    //     // Check if the user is authenticated with Google
+    //     const googleResponse = await axios.get('https://127.0.0.1:8000/auth/status/google/', {
+    //       withCredentials: true,
+    //     });
+
+    //     // If both authentications are successful, redirect to the dashboard
+    //     if (djangoResponse.data.is_authenticated && googleResponse.data.is_authenticated) {
+    //       navigate('/dashboard');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error checking authentication status:', error);
+    //   }
+    // };
+
+    // checkAuthentication();
+  }, [navigate]);
 
 
 
@@ -31,7 +59,7 @@ export default function WelcomePage() {
             MyStory
           </h1>
           <a
-            href="http://localhost:8000/rest/v1/calendar/init/"
+            href="https://127.0.0.1:8000/auth/google/init/"
             className="flex items-center space-x-2 bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-full border border-purple-300 hover:from-pink-600 hover:to-purple-600 transition-all duration-300 shadow-md hover:shadow-lg transform hover:scale-105 hover:shadow-pink-300/50"
           >
             <LogIn className="w-5 h-5" />
