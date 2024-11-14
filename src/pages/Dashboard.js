@@ -5,15 +5,26 @@ import axios from 'axios';
 import queryString from 'query-string';
 import Switch from 'react-switch';
 
+// Add this to your app's initialization
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
 // Helper function to get CSRF token
 function getCSRFToken() {
     const cookies = document.cookie.split(';');
+    console.log("Cookies:", document.cookie); // Debugging line
     for (let cookie of cookies) {
         const [name, value] = cookie.trim().split('=');
+
+        console.log("Cookie Name:", name); // Debugging line
+        console.log("Cookie Value:", value); // Debugging line
+        console.log("cookie:", cookie); // Debugging line
         if (name === 'csrftoken') {
-            return value;
+            console.log("CSRF Token Retrieved:", value); // Debugging line
+            return decodeURIComponent(value); // Use decodeURIComponent to handle encoded values
         }
     }
+    console.warn("CSRF token not found in cookies");
     return null;
 }
 
@@ -60,7 +71,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchEventsAndStories = async () => {
             try {
-                const response = await axios.get('https://127.0.0.1:8000/calendar/events/', { withCredentials: true });
+                const response = await axios.get('https://127.0.0.1:8000/calendar/events/', { withCredentials: true,     headers: { 'X-CSRFToken': getCSRFToken() } });
                 console.log("Events fetched successfully");
 
                 const nextStoryResponse = await axios.get('https://127.0.0.1:8000/calendar/next-story-events/', {
@@ -85,7 +96,7 @@ export default function Dashboard() {
                     }
                 } else if (error.response && error.response.status === 401) {
                     console.log("Not authenticated, redirecting to login...");
-                    navigate('/');
+                    //navigate('/');
                 } else {
                     console.error('Error fetching events:', error);
                     setError('Failed to load events. Please try again later.');

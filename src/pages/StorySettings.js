@@ -31,7 +31,8 @@ export default function StorySettings() {
 
     const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
     if (!isAuthenticated) {
-      navigate('/');
+      console.log("param auth:", params.auth)
+      //navigate('/');
     }
 
     // Fetch CSRF token

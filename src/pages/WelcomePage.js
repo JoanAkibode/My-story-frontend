@@ -3,6 +3,10 @@ import { LogIn, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// Add this to your app's initialization
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
 export default function WelcomePage() {
   const [typedText, setTypedText] = useState('');
   const fullText = "Unlock stories that transform your everyday moments and turn your goals into reality...";
